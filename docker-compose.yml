@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - 8000:8000
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+
+  postgres:
+    image: postgres:16
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    restart: always
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+
+volumes:
+  pg_data:
