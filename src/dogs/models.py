@@ -26,3 +26,29 @@ class Breed(models.Model):
     trainability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     shedding_amount = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     exercise_needs = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+
+class Dog(models.Model):
+    """Represents a dog and its attributes.
+
+    Attributes:
+        name (str): The dog's name.
+        age (int): The dog's age in years.
+        breed (Breed): ForeignKey relation to the Breed model.
+        gender (str): The dog's gender, male or female.
+        color (str): The color of the dog.
+        favorite_food (str): The dog's favorite food.
+        favorite_toy (str): The dog's favorite toy.
+    """
+
+    class Genders(models.TextChoices):
+        MALE = 'm', 'Male'
+        FEMALE = 'f', 'Female'
+
+    name = models.CharField(max_length=127)
+    age = models.IntegerField()
+    breed = models.ForeignKey(Breed, on_delete=models.CASCADE, related_name='dogs')
+    gender = models.CharField(max_length=1, choices=Genders.choices)
+    color = models.CharField(max_length=30)
+    favorite_food = models.CharField(max_length=127)
+    favorite_toy = models.CharField(max_length=127)
