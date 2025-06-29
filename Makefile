@@ -15,3 +15,6 @@ logs:
 
 clear:
 	docker compose -f docker-compose.yml down -v --rmi all
+
+test:
+	docker compose exec app sh -c "cd src && python manage.py test"
